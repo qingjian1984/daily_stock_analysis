@@ -56,9 +56,10 @@ COPY --from=web-builder /app/static ./static/
 COPY docker/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # 确保数据目录存在并授权给 non-root 用户
-RUN mkdir -p /app/data /app/logs /app/reports && \
-    chown -R dsa:dsa /app && \
-    chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN sed -i 's/\r//' /usr/local/bin/docker-entrypoint.sh && \
+    chmod +x /usr/local/bin/docker-entrypoint.sh && \
+    mkdir -p /app/data /app/logs /app/reports && \
+    chown -R dsa:dsa /app
 
 # 设置环境变量默认值
 ENV PYTHONUNBUFFERED=1
